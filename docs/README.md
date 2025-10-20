@@ -14,7 +14,7 @@ Cette documentation est conçue pour :
 
 ## 📚 Structure de la Documentation
 
-La documentation est organisée en **5 fichiers progressifs** à lire dans l'ordre :
+La documentation est organisée en **6 fichiers progressifs** à lire dans l'ordre :
 
 ### [01 - Le Protocole A2A](./01-a2a-protocol.md)
 
@@ -115,6 +115,48 @@ La documentation est organisée en **5 fichiers progressifs** à lire dans l'ord
 
 ---
 
+### [06 - LangChain et LangGraph](./06-langchain-langgraph.md)
+
+**Durée de lecture** : ~50 minutes
+
+**Contenu** :
+- Qu'est-ce que LangChain ?
+- Qu'est-ce que LangGraph ?
+- LangChain vs LangGraph : différences et cas d'usage
+- Utilisation dans le projet (Travel Planner, Calculator, Web Search)
+- Intégration avec Gemini AI
+- Pattern ReAct (Reasoning + Acting)
+- MCP Adapters pour LangChain
+- Exemples concrets du projet
+
+**À lire si** :
+- Vous voulez comprendre comment LangChain est utilisé dans le projet
+- Vous vous demandez "pourquoi LangChain/LangGraph ?"
+- Vous voulez créer des agents qui choisissent automatiquement les bons outils
+- Vous cherchez à comprendre le pattern ReAct
+
+---
+
+## 📑 Guide de Présentation
+
+### [Guide de Présentation (30 minutes)](./PRESENTATION-GUIDE.md)
+
+**Contenu** :
+- Script complet pour présentation de 30 minutes
+- Structure adaptée pour Dev Manager + Product Owner
+- Démo live (5 minutes avec instructions)
+- 11 slides avec contenu détaillé
+- Parties de code à montrer
+- Questions/Réponses préparées
+- Conseils et checklist
+
+**À utiliser si** :
+- Vous devez présenter le projet à votre manager
+- Vous voulez une présentation structurée et pédagogique
+- Vous avez une audience mixte (technique + business)
+
+---
+
 ## 🎓 Parcours de Lecture Recommandés
 
 ### Parcours 1 : Débutant Complet
@@ -136,11 +178,12 @@ La documentation est organisée en **5 fichiers progressifs** à lire dans l'ord
 
 1. **01 - Protocole A2A** : parcourir rapidement, s'attarder sur "Concepts Fondamentaux"
 2. **02 - SDK JS A2A** : lire attentivement les exemples de code
-3. **05 - Guide Pratique** : section "Configuration et Démarrage"
-4. **03 - Protocole MCP** : si besoin de MCP
-5. **04 - MCP Integration** : si besoin de MCP
+3. **06 - LangChain/LangGraph** : comprendre l'intégration LLM
+4. **05 - Guide Pratique** : section "Configuration et Démarrage"
+5. **03 - Protocole MCP** : si besoin de MCP
+6. **04 - MCP Integration** : si besoin de MCP
 
-**Temps total** : ~2 heures
+**Temps total** : ~2h30
 
 ---
 
@@ -161,23 +204,17 @@ La documentation est organisée en **5 fichiers progressifs** à lire dans l'ord
 
 **Objectif** : Préparer une présentation pour votre manager
 
-1. **05 - Guide Pratique** : "Introduction" et "Architecture Globale"
-2. **01 - Protocole A2A** : "Qu'est-ce que A2A" et diagrammes
-3. **03 - Protocole MCP** : "MCP vs A2A" avec tableau comparatif
-4. **04 - MCP Integration** : "Architecture Hybride" avec diagramme complet
-5. **05 - Guide Pratique** : "Flow Complet d'une Requête" avec diagramme de séquence
+**Recommandé** : Utilisez le [**Guide de Présentation**](./PRESENTATION-GUIDE.md) complet avec script de 30 minutes !
 
-**Temps total** : ~1h30
+**Alternative - Lecture rapide** :
+1. **PRESENTATION-GUIDE.md** : lire le script complet (15-20 min)
+2. **05 - Guide Pratique** : "Introduction" et "Architecture Globale"
+3. **01 - Protocole A2A** : "Qu'est-ce que A2A" et diagrammes
+4. **03 - Protocole MCP** : "MCP vs A2A" avec tableau comparatif
+5. **06 - LangChain/LangGraph** : "LangChain vs LangGraph"
+6. **04 - MCP Integration** : "Architecture Hybride" avec diagramme complet
 
-**Slides suggérés** :
-- Slide 1 : Objectif du projet (Travel Planner)
-- Slide 2 : Architecture globale (diagramme)
-- Slide 3 : Protocole A2A (communication agent-à-agent)
-- Slide 4 : Protocole MCP (capacités LLM)
-- Slide 5 : Architecture hybride (A2A + MCP)
-- Slide 6 : Flow d'une requête (diagramme de séquence)
-- Slide 7 : Démo (si possible)
-- Slide 8 : Extensions possibles
+**Temps de préparation** : ~2 heures (incluant répétition de la démo)
 
 ---
 
@@ -215,6 +252,15 @@ Après avoir lu toute la documentation, vous devriez maîtriser :
 - ✅ LangChain + Gemini + MCP Tools
 - ✅ Architecture hybride pour modularité maximale
 
+### LangChain et LangGraph
+
+- ✅ LangChain : framework pour appeler LLMs
+- ✅ LangGraph : créer des agents autonomes
+- ✅ ChatGoogleGenerativeAI : wrapper Gemini
+- ✅ ReAct Pattern : Reasoning + Acting
+- ✅ MCP Adapters : charger tools MCP dans LangChain
+- ✅ createReactAgent : agents qui choisissent les tools
+
 ---
 
 ## 📖 Lecture Complémentaire
@@ -228,7 +274,9 @@ Après avoir lu toute la documentation, vous devriez maîtriser :
 
 - [@a2a-js/sdk sur npm](https://www.npmjs.com/package/@a2a-js/sdk)
 - [@modelcontextprotocol/sdk](https://www.npmjs.com/package/@modelcontextprotocol/sdk)
-- [LangChain MCP](https://js.langchain.com/docs/integrations/mcp)
+- [@langchain/google-genai](https://www.npmjs.com/package/@langchain/google-genai)
+- [@langchain/langgraph](https://www.npmjs.com/package/@langchain/langgraph)
+- [@langchain/mcp-adapters](https://www.npmjs.com/package/@langchain/mcp-adapters)
 
 ### Ressources Externes
 
@@ -288,18 +336,22 @@ Cette documentation a été créée pour vous aider à maîtriser le projet. Si 
 
 ## 🎉 Bon Apprentissage !
 
-Cette documentation représente **~5000 lignes** de contenu pédagogique couvrant :
+Cette documentation représente **~7500 lignes** de contenu pédagogique couvrant :
 
 - ✅ Protocole A2A (800 lignes)
 - ✅ SDK JavaScript A2A (1100 lignes)
 - ✅ Protocole MCP (650 lignes)
 - ✅ Intégration MCP + A2A (950 lignes)
 - ✅ Guide Pratique Complet (1600 lignes)
+- ✅ LangChain et LangGraph (900 lignes)
+- ✅ Guide de Présentation (1500 lignes)
 
-**Temps de lecture total** : ~4-5 heures pour tout lire attentivement
+**Temps de lecture total** : ~5-6 heures pour tout lire attentivement
 
 Prenez votre temps, expérimentez, et n'hésitez pas à revenir sur les concepts difficiles. Bonne lecture ! 📚
 
 ---
 
 **Fichier suivant recommandé** : [01 - Le Protocole A2A](./01-a2a-protocol.md)
+
+**Pour présentation** : [Guide de Présentation (30 min)](./PRESENTATION-GUIDE.md)
