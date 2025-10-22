@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent-to-Agent (A2A) Protocol - A Universal Language for AI Agents</title>
+
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.0/theme/black.min.css">
+
+    <!-- Custom styles -->
+    <style>
+        :root {
+            --a2a-blue: #4285F4;
+            --mcp-green: #34A853;
+            --accent-amber: #FFC107;
+            --bg-dark: #1a1a1a;
+            --bg-darker: #0d0d0d;
+            --text-light: #ffffff;
+            --text-muted: #e0e0e0;
+            --text-dim: #999999;
+        }
+
+        .reveal {
+            font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 32px;
+        }
+
+        .reveal h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            color: var(--a2a-blue);
+            text-transform: none;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal h2 {
+            font-size: 2.2em;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: none;
+            margin-bottom: 0.8em;
+        }
+
+        .reveal h3 {
+            font-size: 1.6em;
+            font-weight: 600;
+            color: var(--a2a-blue);
+            text-transform: none;
+            margin-bottom: 0.6em;
+        }
+
+        .reveal p, .reveal li {
+            font-size: 1em;
+            line-height: 1.6;
+            color: var(--text-muted);
+        }
+
+        .reveal strong {
+            color: var(--accent-amber);
+            font-weight: 600;
+        }
+
+        .reveal .slides section {
+            text-align: left;
+            padding: 2em;
+        }
+
+        .reveal .center {
+            text-align: center;
+        }
+
+        /* Custom classes */
+        .highlight {
+            color: var(--accent-amber);
+            font-weight: 600;
+        }
+
+        .blue {
+            color: var(--a2a-blue);
+        }
+
+        .green {
+            color: var(--mcp-green);
+        }
+
+        .big-question {
+            font-size: 1.8em;
+            text-align: center;
+            color: var(--accent-amber);
+            margin: 1.5em 0;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: var(--text-dim);
+            font-weight: 300;
+            margin-top: -0.5em;
+        }
+
+        /* Code-like boxes */
+        .code-box {
+            background: var(--bg-darker);
+            border: 2px solid var(--a2a-blue);
+            border-radius: 10px;
+            padding: 1.5em;
+            margin: 1em 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.8;
+        }
+
+        .code-box.green {
+            border-color: var(--mcp-green);
+        }
+
+        /* Comparison boxes */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2em;
+            margin: 1.5em 0;
+        }
+
+        .comparison-item {
+            background: var(--bg-darker);
+            border-radius: 10px;
+            padding: 1.5em;
+            border: 3px solid var(--a2a-blue);
+        }
+
+        .comparison-item.green {
+            border-color: var(--mcp-green);
+        }
+
+        .comparison-item h3 {
+            margin-top: 0;
+            font-size: 1.4em;
+        }
+
+        /* Pill badges */
+        .badge {
+            display: inline-block;
+            background: var(--a2a-blue);
+            color: white;
+            padding: 0.3em 0.8em;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin: 0.2em;
+        }
+
+        .badge.green {
+            background: var(--mcp-green);
+        }
+
+        .badge.amber {
+            background: var(--accent-amber);
+            color: black;
+        }
+
+        /* Icons using emoji */
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 0.3em;
+        }
+
+        /* Lists */
+        .reveal ul {
+            margin: 1em 0;
+        }
+
+        .reveal ul li {
+            margin: 0.6em 0;
+        }
+
+        /* Checkmarks and X marks */
+        .check {
+            color: #34A853;
+            font-weight: 700;
+        }
+
+        .cross {
+            color: #EA4335;
+            font-weight: 700;
+        }
+
+        /* Three columns */
+        .three-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5em;
+            margin: 1.5em 0;
+        }
+
+        .col-item {
+            background: var(--bg-darker);
+            border-radius: 10px;
+            padding: 1.5em;
+            border: 3px solid var(--a2a-blue);
+            text-align: center;
+        }
+
+        .col-item h3 {
+            font-size: 1.2em;
+            margin-bottom: 0.5em;
+        }
+
+        /* PlantUML diagrams */
+        .plantuml-container {
+            background: var(--bg-darker);
+            padding: 2em;
+            border-radius: 10px;
+            margin: 1em 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .plantuml-container pre {
+            margin: 0;
+            width: 100%;
+        }
+
+        .plantuml-container svg {
+            max-width: 100%;
+            height: auto;
+            background: transparent;
+        }
+
+        /* Progress bar customization */
+        .reveal .progress {
+            background: rgba(66, 133, 244, 0.2);
+            height: 4px;
+        }
+
+        .reveal .progress span {
+            background: var(--a2a-blue);
+        }
+
+        /* Special title slide */
+        .title-slide h1 {
+            font-size: 3.5em;
+            background: linear-gradient(135deg, var(--a2a-blue), var(--mcp-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Center content */
+        .reveal .center-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+        }
+
+        /* Arrows and visual elements */
+        .arrow {
+            font-size: 2em;
+            color: var(--a2a-blue);
+            margin: 0 0.3em;
+        }
+
+        .arrow.green {
+            color: var(--mcp-green);
+        }
+
+        /* Box with border */
+        .info-box {
+            background: var(--bg-darker);
+            border-left: 5px solid var(--accent-amber);
+            padding: 1.5em;
+            margin: 1em 0;
+            border-radius: 5px;
+        }
+
+        /* Small text */
+        .small {
+            font-size: 0.75em;
+            color: var(--text-dim);
+        }
+
+        /* Grid layout for examples */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2em;
+            align-items: start;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- SLIDE 1: TITLE -->
+            <section class="title-slide center">
+                <h1>Agent-to-Agent Protocol</h1>
+                <p class="subtitle">A Universal Language for AI Agents</p>
+                <br><br>
+                <p style="font-size: 0.9em; color: var(--text-dim);">
+                    A2A Multi-Agent Travel Planner Demo<br>
+                    2025
+                </p>
+            </section>
+
+            <!-- PART 1: THE PROBLEM -->
+
+            <!-- SLIDE 2: THE AI AGENTS ERA -->
+            <section>
+                <h2>The Rise of AI Agents</h2>
+                <br>
+                <p class="emoji">🤖</p>
+                <p style="font-size: 1.3em; margin-bottom: 1em;">AI agents are everywhere now.</p>
+                <ul style="font-size: 0.95em;">
+                    <li><strong>Personal assistants</strong> - Help with daily tasks</li>
+                    <li><strong>Customer service</strong> - Answer questions 24/7</li>
+                    <li><strong>Data analysis</strong> - Process complex information</li>
+                    <li><strong>Content creation</strong> - Write, translate, generate</li>
+                    <li><strong>Business automation</strong> - Workflow orchestration</li>
+                </ul>
+                <br>
+                <p class="highlight" style="font-size: 1.1em;">But there's a problem...</p>
+            </section>
+
+            <!-- SLIDE 3: THE PROBLEM -->
+            <section>
+                <h2>The Problem: Fragmentation</h2>
+                <br>
+                <div class="center-content">
+                    <p style="font-size: 1.2em; margin-bottom: 1em;">
+                        <span class="emoji">🗣️</span> Each agent speaks a <strong>different language</strong>
+                    </p>
+                    <div style="margin: 2em 0;">
+                        <span class="badge">CrewAI</span>
+                        <span class="badge">LangGraph</span>
+                        <span class="badge">ADK</span>
+                        <span class="badge">AutoGen</span>
+                        <span class="badge">Haystack</span>
+                        <span class="badge">Custom frameworks</span>
+                    </div>
+                    <br>
+                    <p class="big-question">How can they work together?</p>
+                </div>
+            </section>
+
+            <!-- SLIDE 4: REAL EXAMPLE - TRAVEL BOOKING CHAOS -->
+            <section>
+                <h2>Real Example: Travel Booking Chaos</h2>
+                <br>
+                <div style="font-size: 0.9em;">
+                    <p><strong>Before A2A:</strong> Every connection needs custom code</p>
+                    <br>
+                    <div class="plantuml-container">
+                        <pre><code class="language-plantuml">
+@startuml
+!theme plain
+skinparam backgroundColor #1a1a1a
+skinparam defaultFontColor #e0e0e0
+skinparam arrowColor #4285F4
+skinparam componentStyle rectangle
+
+rectangle "Your Agent" as A #4285F4
+rectangle "Hotel Agent" as B #EA4335
+rectangle "Car Rental\nAgent" as C #EA4335
+rectangle "Flight Agent" as D #EA4335
+rectangle "Restaurant\nAgent" as E #EA4335
+
+A -right-> B : Custom\nIntegration 1
+A -down-> C : Custom\nIntegration 2
+A -down-> D : Custom\nIntegration 3
+A -down-> E : Custom\nIntegration 4
+@enduml
+                        </code></pre>
+                    </div>
+                    <br>
+                    <p class="highlight">Each integration = Different protocol, different format, different setup</p>
+                </div>
+            </section>
+
+            <!-- SLIDE 5: THE CONSEQUENCES -->
+            <section>
+                <h2>The Consequences</h2>
+                <br>
+                <div class="grid-2" style="font-size: 0.9em;">
+                    <div>
+                        <h3 class="cross">✗ Problems</h3>
+                        <ul>
+                            <li><strong>Redundant work</strong><br>Developers rebuild the same thing</li>
+                            <li><strong>High costs</strong><br>Time + money wasted</li>
+                            <li><strong>Technical debt</strong><br>Hard to maintain</li>
+                            <li><strong>Fragile integrations</strong><br>Break easily</li>
+                            <li><strong>Can't scale</strong><br>Adding agents gets exponentially harder</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="info-box">
+                            <p style="font-size: 1.3em; font-weight: 600; margin-bottom: 1em;">The Math Problem</p>
+                            <p><strong>5 agents</strong> = 10 custom integrations</p>
+                            <p><strong>10 agents</strong> = 45 custom integrations</p>
+                            <p><strong>20 agents</strong> = 190 custom integrations!</p>
+                            <br>
+                            <p class="small">Formula: N × (N-1) ÷ 2</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 6: THE QUESTION -->
+            <section class="center">
+                <div class="center-content">
+                    <p class="emoji" style="font-size: 3em;">💡</p>
+                    <br>
+                    <p class="big-question" style="font-size: 2em;">
+                        What if agents could<br>understand each other?
+                    </p>
+                    <br>
+                    <p style="font-size: 1.3em; color: var(--text-muted);">
+                        What if we had a <strong>universal language</strong>?
+                    </p>
+                    <br><br>
+                    <p style="font-size: 1.5em; color: var(--a2a-blue);">
+                        → Enter A2A
+                    </p>
+                </div>
+            </section>
+
+            <!-- PART 2: THE SOLUTION -->
+
+            <!-- SLIDE 7: MEET A2A -->
+            <section>
+                <h2>Meet A2A</h2>
+                <br>
+                <div class="center-content">
+                    <p style="font-size: 1.5em; margin-bottom: 0.5em;">
+                        <strong class="blue">Agent-to-Agent Protocol</strong>
+                    </p>
+                    <p style="font-size: 1.2em; margin-bottom: 2em;">
+                        The universal language for AI agents
+                    </p>
+
+                    <div class="info-box" style="text-align: center; background: linear-gradient(135deg, rgba(66,133,244,0.1), rgba(52,168,83,0.1)); border: none;">
+                        <p style="font-size: 1.3em; margin-bottom: 0.5em;">
+                            <span class="emoji">🏢</span> <strong>Created by Google</strong>
+                        </p>
+                        <p style="font-size: 1.3em;">
+                            <span class="emoji">📅</span> <strong>2025</strong>
+                        </p>
+                    </div>
+
+                    <br>
+                    <p style="font-size: 1.1em; color: var(--text-muted);">
+                        <span class="emoji">🌍</span> One protocol to connect them all
+                    </p>
+                </div>
+            </section>
+
+            <!-- SLIDE 8: BEFORE A2A -->
+            <section>
+                <h2>Before A2A: "Spaghetti" Architecture</h2>
+                <br>
+                <div style="font-size: 0.85em;">
+                    <p><strong>Point-to-point integrations:</strong> Every agent needs custom code for every other agent</p>
+                    <br>
+                    <div class="plantuml-container">
+                        <pre><code class="language-plantuml">
+@startuml
+!theme plain
+skinparam backgroundColor #1a1a1a
+skinparam defaultFontColor #e0e0e0
+skinparam arrowColor #EA4335
+skinparam componentStyle rectangle
+
+rectangle "Agent A" as A #EA4335
+rectangle "Agent B" as B #EA4335
+rectangle "Agent C" as C #EA4335
+rectangle "Agent D" as D #EA4335
+rectangle "Agent E" as E #EA4335
+
+A <--> B : custom
+A <--> C : custom
+A <--> D : custom
+B <--> C : custom
+B <--> D : custom
+C <--> D : custom
+A <--> E : custom
+B <--> E : custom
+C <--> E : custom
+D <--> E : custom
+@enduml
+                        </code></pre>
+                    </div>
+                    <br>
+                    <p class="highlight"><span class="cross">✗</span> 5 agents = 10 custom integrations (messy!)</p>
+                </div>
+            </section>
+
+            <!-- SLIDE 9: WITH A2A -->
+            <section>
+                <h2>With A2A: "Star" Architecture</h2>
+                <br>
+                <div style="font-size: 0.85em;">
+                    <p><strong>Standard protocol:</strong> Each agent just learns A2A once</p>
+                    <br>
+                    <div class="plantuml-container">
+                        <pre><code class="language-plantuml">
+@startuml
+!theme plain
+skinparam backgroundColor #1a1a1a
+skinparam defaultFontColor #e0e0e0
+skinparam arrowColor #4285F4
+skinparam componentStyle rectangle
+
+rectangle "A2A\nProtocol" as A2A #4285F4
+rectangle "Agent A" as A #34A853
+rectangle "Agent B" as B #34A853
+rectangle "Agent C" as C #34A853
+rectangle "Agent D" as D #34A853
+rectangle "Agent E" as E #34A853
+
+A <--> A2A : A2A
+B <--> A2A : A2A
+C <--> A2A : A2A
+D <--> A2A : A2A
+E <--> A2A : A2A
+@enduml
+                        </code></pre>
+                    </div>
+                    <br>
+                    <p class="highlight"><span class="check">✓</span> 5 agents = 5 standard integrations (clean!)</p>
+                </div>
+            </section>
+
+            <!-- SLIDE 10: THE CORE PRINCIPLE -->
+            <section>
+                <h2>The Core Principle</h2>
+                <br>
+                <div class="center-content">
+                    <p style="font-size: 2em; font-weight: 600; color: var(--accent-amber); margin-bottom: 1.5em;">
+                        Standardization = Interoperability
+                    </p>
+
+                    <div style="font-size: 1.1em; line-height: 2;">
+                        <p><span class="emoji">🌐</span> <strong>Like HTTP</strong> for web pages</p>
+                        <p><span class="emoji">📧</span> <strong>Like SMTP</strong> for emails</p>
+                        <p><span class="emoji">🔌</span> <strong>Like USB</strong> for devices</p>
+                        <br>
+                        <p style="font-size: 1.3em;"><span class="emoji">🤖</span> <strong class="blue">A2A</strong> for AI agents</p>
+                    </div>
+
+                    <br><br>
+                    <p style="font-size: 1em; color: var(--text-dim);">
+                        One protocol for all agents, regardless of framework
+                    </p>
+                </div>
+            </section>
+
+            <!-- SLIDE 11: ANALOGY - USB -->
+            <section>
+                <h2>Analogy: A2A is like USB</h2>
+                <br>
+                <div class="comparison" style="font-size: 0.85em;">
+                    <div>
+                        <h3><span class="emoji">🔌</span> Before USB</h3>
+                        <ul>
+                            <li>Serial port for mouse</li>
+                            <li>Parallel port for printer</li>
+                            <li>PS/2 for keyboard</li>
+                            <li>Different port for each device</li>
+                            <li>Chaos!</li>
+                        </ul>
+                        <p class="cross" style="margin-top: 1em;">✗ N devices = N different ports</p>
+                    </div>
+                    <div>
+                        <h3><span class="emoji">✨</span> After USB</h3>
+                        <ul>
+                            <li>One universal port</li>
+                            <li>Works for everything</li>
+                            <li>Plug and play</li>
+                            <li>Easy to add new devices</li>
+                            <li>Simple!</li>
+                        </ul>
+                        <p class="check" style="margin-top: 1em;">✓ N devices = 1 standard port</p>
+                    </div>
+                </div>
+                <br>
+                <div class="info-box" style="text-align: center;">
+                    <p style="font-size: 1.2em;"><strong>A2A does the same for AI agents!</strong></p>
+                </div>
+            </section>
+
+            <!-- PART 3: HOW IT WORKS -->
+
+            <!-- SLIDE 12: THE 3 PILLARS -->
+            <section>
+                <h2>The 3 Pillars of A2A</h2>
+                <br>
+                <div class="three-cols" style="font-size: 0.85em;">
+                    <div class="col-item">
+                        <p class="emoji">🎴</p>
+                        <h3>Agent Card</h3>
+                        <p>Discovery</p>
+                        <br>
+                        <p class="small">"Who are you and what can you do?"</p>
+                    </div>
+                    <div class="col-item">
+                        <p class="emoji">💬</p>
+                        <h3>Messages & Tasks</h3>
+                        <p>Communication</p>
+                        <br>
+                        <p class="small">"Let's talk and work together"</p>
+                    </div>
+                    <div class="col-item">
+                        <p class="emoji">⚙️</p>
+                        <h3>Agent Executor</h3>
+                        <p>Execution</p>
+                        <br>
+                        <p class="small">"The bridge to make it work"</p>
+                    </div>
+                </div>
+                <br><br>
+                <p style="text-align: center; font-size: 1.1em; color: var(--text-muted);">
+                    These three components work together to enable seamless agent collaboration
+                </p>
+            </section>
+
+            <!-- SLIDE 13: PILLAR 1 - AGENT CARD -->
+            <section>
+                <h2>Pillar 1: Agent Card</h2>
+                <p class="subtitle">The business card for agents</p>
+                <br>
+                <div class="grid-2" style="font-size: 0.85em;">
+                    <div>
+                        <p style="margin-bottom: 1em;"><strong>What is it?</strong></p>
+                        <p>Before agents talk, they exchange cards. The card tells you everything you need to know.</p>
+                        <br>
+                        <p style="margin-bottom: 0.5em;"><strong>Like a business card:</strong></p>
+                        <ul style="font-size: 0.95em;">
+                            <li>Who am I?</li>
+                            <li>What can I do?</li>
+                            <li>How to talk to me?</li>
+                            <li>What format do I use?</li>
+                        </ul>
+                        <br>
+                        <p class="highlight">→ Now I know everything!</p>
+                    </div>
+                    <div>
+                        <div class="code-box">
+Agent Card {
+  name: "Weather Agent"
+
+  description:
+    "Get weather forecasts"
+
+  skills: [
+    "get_forecast",
+    "get_temperature"
+  ]
+
+  inputs: text
+  outputs: text
+}
+                        </div>
+                        <p class="small" style="margin-top: 1em; text-align: center;">
+                            Simple structure, clear information
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 14: PILLAR 2 - MESSAGES -->
+            <section>
+                <h2>Pillar 2: Messages</h2>
+                <p class="subtitle">Quick conversations</p>
+                <br>
+                <div class="grid-2" style="font-size: 0.85em;">
+                    <div>
+                        <p style="margin-bottom: 1em;"><strong>What are Messages?</strong></p>
+                        <p>Messages are for quick, simple exchanges. Like a chat conversation.</p>
+                        <br>
+                        <p style="margin-bottom: 0.5em;"><strong>Use for:</strong></p>
+                        <ul style="font-size: 0.95em;">
+                            <li>Fast questions</li>
+                            <li>Simple requests</li>
+                            <li>Direct responses</li>
+                            <li>Real-time chat</li>
+                        </ul>
+                        <br>
+                        <p style="margin-top: 1em;">
+                            <strong>Flow:</strong><br>
+                            Request → Response<br>
+                            Fast and simple!
+                        </p>
+                    </div>
+                    <div>
+                        <div class="code-box">
+Message {
+  role: "user" or "agent"
+
+  parts: [
+    {
+      text: "What's the weather?"
+    }
+  ]
+
+  message_id: "msg-123"
+}
+                        </div>
+                        <br>
+                        <p class="info-box" style="font-size: 0.9em;">
+                            <strong>Example:</strong><br>
+                            "What's the weather in Paris?" → "Sunny, 25°C"
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 15: PILLAR 3 - TASKS -->
+            <section>
+                <h2>Pillar 3: Tasks</h2>
+                <p class="subtitle">Long-running work</p>
+                <br>
+                <div class="grid-2" style="font-size: 0.85em;">
+                    <div>
+                        <p style="margin-bottom: 1em;"><strong>What are Tasks?</strong></p>
+                        <p>Tasks are for complex operations that take time. You can track progress.</p>
+                        <br>
+                        <p style="margin-bottom: 0.5em;"><strong>Use for:</strong></p>
+                        <ul style="font-size: 0.95em;">
+                            <li>Trip planning</li>
+                            <li>Data analysis</li>
+                            <li>Report generation</li>
+                            <li>Any work > 30 seconds</li>
+                        </ul>
+                        <br>
+                        <p style="margin-top: 1em;">
+                            <strong>Lifecycle:</strong><br>
+                            submitted → in_progress → completed
+                        </p>
+                    </div>
+                    <div>
+                        <div class="code-box">
+Task {
+  status: "submitted"
+          ↓
+          "in_progress"
+          ↓
+          "completed"
+
+  artifacts: [
+    results stored here
+    as they are produced
+  ]
+
+  task_id: "task-456"
+}
+                        </div>
+                        <br>
+                        <p class="info-box" style="font-size: 0.9em;">
+                            <strong>Example:</strong><br>
+                            "Plan a 7-day trip to Japan" → Track progress → Get complete itinerary
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 16: AGENT EXECUTOR -->
+            <section>
+                <h2>Agent Executor: The Bridge</h2>
+                <br>
+                <div style="font-size: 0.9em;">
+                    <p style="margin-bottom: 1.5em;"><strong>What is it?</strong> The translator inside each agent that connects A2A protocol to internal logic.</p>
+
+                    <div class="plantuml-container">
+                        <pre><code class="language-plantuml">
+@startuml
+!theme plain
+skinparam backgroundColor #1a1a1a
+skinparam defaultFontColor #e0e0e0
+skinparam arrowColor #4285F4
+skinparam componentStyle rectangle
+
+rectangle "A2A Message\nStandard Format" as A #4285F4
+rectangle "Agent Executor\nThe Bridge" as B #FFC107
+rectangle "Internal Logic\nFramework-specific" as C #34A853
+rectangle "crew.kickoff" as D #666666
+rectangle "agent.invoke" as E #666666
+rectangle "your_function" as F #666666
+
+A -right-> B : receives
+B -right-> C : translates to
+C -down-> D : CrewAI
+C -down-> E : LangGraph
+C -down-> F : Custom
+@enduml
+                        </code></pre>
+                    </div>
+
+                    <br>
+                    <div class="info-box">
+                        <p><strong>Key point:</strong> Works with ANY framework (CrewAI, LangGraph, ADK, custom code...)</p>
+                        <p style="margin-top: 0.5em;">The agent just needs to implement the Executor interface!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 17: COMPLETE FLOW - WEATHER EXAMPLE (PlantUML) -->
+            <section>
+                <h2>Complete Flow: Weather Agent</h2>
+                <p class="subtitle">Step by step example</p>
+                <br>
+                <div class="plantuml-container" style="font-size: 0.75em;">
+                    <pre><code class="language-plantuml">
+@startuml
+!theme plain
+skinparam backgroundColor #1a1a1a
+skinparam sequenceMessageAlign center
+skinparam defaultFontColor #e0e0e0
+skinparam arrowColor #4285F4
+
+actor Client
+participant "Travel\nPlanner" as TP
+participant "Weather\nAgent" as WA
+database "OpenWeather\nAPI" as API
+
+Client -> TP: "Plan trip to Paris"
+activate TP
+
+TP -> WA: GET /agent-card
+WA --> TP: Agent Card\n(capabilities)
+
+TP -> WA: POST /send-message\n"Get weather for Paris"
+activate WA
+
+WA -> WA: Execute()
+WA -> API: GET /forecast?city=Paris
+API --> WA: Weather data
+
+WA --> TP: Message\n"Sunny, 25°C"
+deactivate WA
+
+TP --> Client: Complete itinerary
+deactivate TP
+@enduml
+                    </code></pre>
+                </div>
+                <br>
+                <p class="small" style="text-align: center;">All communication uses the same A2A protocol</p>
+            </section>
+
+            <!-- SLIDE 18: REAL CASE - PICKLEBALL (PlantUML) -->
+            <section>
+                <h2>Real Case: Pickleball Game</h2>
+                <p class="subtitle">Multi-agent orchestration with different frameworks</p>
+                <br>
+                <div style="font-size: 0.75em;">
+                    <p style="margin-bottom: 1em;"><strong>Scenario:</strong> Schedule a pickleball game with 3 friends. Each friend has their own agent built with different frameworks.</p>
+
+                    <div class="plantuml-container">
+                        <pre><code class="language-plantuml">
+@startuml
+!theme plain
+skinparam backgroundColor #1a1a1a
+skinparam sequenceMessageAlign center
+skinparam defaultFontColor #e0e0e0
+skinparam arrowColor #4285F4
+
+actor User
+participant "Coordinator\n(CrewAI)" as Coord
+participant "Alice Agent\n(LangGraph)" as Alice
+participant "Bob Agent\n(ADK)" as Bob
+participant "Charlie Agent\n(Custom)" as Charlie
+
+User -> Coord: "Schedule pickleball game"
+activate Coord
+
+Coord -> Alice: GET /agent-card
+Alice --> Coord: Card\n(availability skill)
+
+Coord -> Alice: POST /send-message\n"Check availability"
+activate Alice
+Alice --> Coord: "Free on\nSaturday 2-4pm"
+deactivate Alice
+
+Coord -> Bob: POST /send-message\n"Check availability"
+activate Bob
+Bob --> Coord: "Free on\nSaturday 3-5pm"
+deactivate Bob
+
+Coord -> Charlie: POST /send-message\n"Check availability"
+activate Charlie
+Charlie --> Coord: "Free on\nSaturday 2-6pm"
+deactivate Charlie
+
+Coord -> Coord: Find overlap\n(Saturday 3-4pm)
+
+Coord --> User: "Game scheduled:\nSaturday 3-4pm"
+deactivate Coord
+
+note right of Coord
+  Different frameworks
+  Same A2A protocol
+  Seamless collaboration!
+end note
+@enduml
+                        </code></pre>
+                    </div>
+
+                    <br>
+                    <p class="highlight" style="text-align: center;">
+                        <span class="check">✓</span> Different frameworks, same protocol, seamless collaboration!
+                    </p>
+                </div>
+            </section>
+
+            <!-- PART 4: MCP -->
+
+            <!-- SLIDE 19: WAIT WHAT ABOUT MCP -->
+            <section class="center">
+                <div class="center-content">
+                    <p class="emoji" style="font-size: 3em;">🤔</p>
+                    <br>
+                    <h2>Wait... What about MCP?</h2>
+                    <br>
+                    <p style="font-size: 1.3em; color: var(--text-muted);">
+                        "How is this different from MCP?"
+                    </p>
+                    <br>
+                    <p style="font-size: 1.5em; color: var(--accent-amber);">
+                        Good question! Let's clarify.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SLIDE 20: A2A VS MCP -->
+            <section>
+                <h2>A2A vs MCP: Different Purposes</h2>
+                <br>
+                <div class="comparison" style="font-size: 0.8em;">
+                    <div class="comparison-item">
+                        <h3><span class="blue">A2A</span> (Horizontal)</h3>
+                        <br>
+                        <p><strong>Agent ↔ Agent</strong></p>
+                        <br>
+                        <ul>
+                            <li><strong>Communication</strong></li>
+                            <li><strong>Collaboration</strong></li>
+                            <li><strong>Orchestration</strong></li>
+                            <li><strong>Conversation</strong></li>
+                        </ul>
+                        <br>
+                        <div class="code-box" style="font-size: 0.9em;">
+Use case:
+
+"Ask Weather Agent
+ for the forecast"
+
+Agent talks to Agent
+                        </div>
+                    </div>
+
+                    <div class="comparison-item green">
+                        <h3><span class="green">MCP</span> (Vertical)</h3>
+                        <br>
+                        <p><strong>Agent ↕ Tool</strong></p>
+                        <br>
+                        <ul>
+                            <li><strong>Function calling</strong></li>
+                            <li><strong>Augmentation</strong></li>
+                            <li><strong>Tool usage</strong></li>
+                            <li><strong>Execution</strong></li>
+                        </ul>
+                        <br>
+                        <div class="code-box green" style="font-size: 0.9em;">
+Use case:
+
+"Use calculator tool
+ for precise math"
+
+Agent uses Tool
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <p style="text-align: center; font-size: 1.1em; color: var(--text-muted);">
+                    Different protocols for different needs
+                </p>
+            </section>
+
+            <!-- SLIDE 21: A2A + MCP TOGETHER -->
+            <section>
+                <h2>A2A + MCP = Perfect Combo</h2>
+                <br>
+                <div style="font-size: 0.85em;">
+                    <p style="margin-bottom: 1em;"><strong>They work together!</strong> Use both protocols in the same system for maximum power.</p>
+
+                    <div class="plantuml-container">
+                        <pre><code class="language-plantuml">
+@startuml
+!theme plain
+skinparam backgroundColor #1a1a1a
+skinparam defaultFontColor #e0e0e0
+skinparam arrowColor #4285F4
+skinparam componentStyle rectangle
+
+rectangle "Client" as Client #666666
+rectangle "Travel\nPlanner" as TP #4285F4
+rectangle "Weather\nAgent" as WA #4285F4
+rectangle "Translator\nAgent" as TR #4285F4
+rectangle "Calculator\nAgent" as CA #FFC107
+rectangle "Math\nTools" as MT #34A853
+rectangle "add" as ADD #34A853
+rectangle "multiply" as MULT #34A853
+rectangle "calculate\n_budget" as BUDGET #34A853
+
+Client -down-> TP : A2A
+TP -down-> WA : A2A
+TP -down-> TR : A2A
+TP -down-> CA : A2A
+CA -down-> MT : MCP
+MT -down-> ADD
+MT -down-> MULT
+MT -down-> BUDGET
+@enduml
+                        </code></pre>
+                    </div>
+
+                    <br>
+                    <div class="info-box">
+                        <p><span class="badge">A2A</span> Agents communicate horizontally</p>
+                        <p style="margin-top: 0.5em;"><span class="badge green">MCP</span> Agents use tools vertically</p>
+                        <p style="margin-top: 0.5em;"><span class="badge amber">Result</span> Complete platform!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 22: OUR PROJECT USES BOTH -->
+            <section>
+                <h2>Our Project Uses Both</h2>
+                <br>
+                <div class="grid-2" style="font-size: 0.85em;">
+                    <div>
+                        <h3><span class="emoji">🎯</span> Travel Planner</h3>
+                        <p style="margin-bottom: 1em;">The orchestrator agent</p>
+
+                        <p><strong>Uses <span class="blue">A2A</span> to:</strong></p>
+                        <ul>
+                            <li>Call Weather Agent</li>
+                            <li>Call Translator Agent</li>
+                            <li>Call Web Search Agent</li>
+                            <li>Call Calculator Agent</li>
+                        </ul>
+                        <br>
+                        <p class="highlight">→ Coordinates 5 agents with A2A!</p>
+                    </div>
+
+                    <div>
+                        <h3><span class="emoji">🧮</span> Calculator Agent</h3>
+                        <p style="margin-bottom: 1em;">The tool-using agent</p>
+
+                        <p><strong>Receives via <span class="blue">A2A</span>:</strong></p>
+                        <p style="margin-left: 1em; margin-bottom: 1em;">"Calculate trip budget"</p>
+
+                        <p><strong>Uses <span class="green">MCP</span> tools:</strong></p>
+                        <ul>
+                            <li>add()</li>
+                            <li>multiply()</li>
+                            <li>calculate_trip_budget()</li>
+                        </ul>
+                        <br>
+                        <p><strong>Responds via <span class="blue">A2A</span>:</strong></p>
+                        <p style="margin-left: 1em;">"Total: $480"</p>
+                        <br>
+                        <p class="highlight">→ Both protocols working together!</p>
+                    </div>
+                </div>
+                <br>
+                <p style="text-align: center; font-size: 1.1em; color: var(--accent-amber);">
+                    <strong>Best of both worlds!</strong>
+                </p>
+            </section>
+
+            <!-- PART 5: NEW POSSIBILITIES -->
+
+            <!-- SLIDE 23: WHAT BECOMES POSSIBLE -->
+            <section>
+                <h2>What Becomes Possible?</h2>
+                <br>
+                <div style="font-size: 0.9em;">
+                    <div class="three-cols">
+                        <div class="col-item">
+                            <p class="emoji">🏪</p>
+                            <h3>Agent Marketplaces</h3>
+                            <p class="small">Download agents like apps</p>
+                            <br>
+                            <p>"I need a translation agent" → Browse → Connect</p>
+                            <br>
+                            <p>Plug and play!</p>
+                        </div>
+
+                        <div class="col-item">
+                            <p class="emoji">🤝</p>
+                            <h3>Federated Systems</h3>
+                            <p class="small">Secure cross-organization collaboration</p>
+                            <br>
+                            <p>Your company's agents + Partner agents</p>
+                            <br>
+                            <p>Work together safely!</p>
+                        </div>
+
+                        <div class="col-item">
+                            <p class="emoji">🔌</p>
+                            <h3>Plug-and-Play</h3>
+                            <p class="small">Add agents without code changes</p>
+                            <br>
+                            <p>Discover card → Start using</p>
+                            <br>
+                            <p>No integration work!</p>
+                        </div>
+                    </div>
+
+                    <br><br>
+
+                    <div class="info-box" style="text-align: center;">
+                        <p style="font-size: 1.2em;"><strong>A2A unlocks a new era of AI collaboration</strong></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 24: THE ECOSYSTEM VISION -->
+            <section>
+                <h2>The Ecosystem Vision</h2>
+                <br>
+                <div style="font-size: 0.85em;">
+                    <p style="margin-bottom: 1em;"><strong>Imagine an open marketplace of AI agents...</strong></p>
+
+                    <div class="plantuml-container">
+                        <pre><code class="language-plantuml">
+@startuml
+!theme plain
+skinparam backgroundColor #1a1a1a
+skinparam defaultFontColor #e0e0e0
+skinparam arrowColor #4285F4
+skinparam componentStyle rectangle
+
+rectangle "Agent Registry\nMarketplace" as Registry #4285F4
+
+rectangle "Weather\nAgents" as A1 #34A853
+rectangle "Translation\nAgents" as A2 #34A853
+rectangle "Data Analysis\nAgents" as A3 #34A853
+rectangle "Travel\nAgents" as A4 #34A853
+rectangle "Finance\nAgents" as A5 #34A853
+rectangle "Healthcare\nAgents" as A6 #34A853
+
+actor "Company A" as C1
+actor "Company B" as C2
+actor "Developer" as C3
+actor "Enterprise" as C4
+
+Registry -down-> A1
+Registry -down-> A2
+Registry -down-> A3
+Registry -down-> A4
+Registry -down-> A5
+Registry -down-> A6
+
+C1 .up.> Registry : discovers
+C2 .up.> Registry : discovers
+C3 .up.> Registry : discovers
+C4 .up.> Registry : discovers
+@enduml
+                        </code></pre>
+                    </div>
+
+                    <br>
+                    <ul>
+                        <li><strong>Dynamic discovery</strong> - Find agents by capability</li>
+                        <li><strong>Instant integration</strong> - Just read the card and connect</li>
+                        <li><strong>Global collaboration</strong> - Agents from anywhere work together</li>
+                    </ul>
+
+                    <br>
+                    <p class="highlight" style="text-align: center;">Like the app store, but for AI agents!</p>
+                </div>
+            </section>
+
+            <!-- SLIDE 25: OUR DEMO -->
+            <section>
+                <h2>Our Demo: What You'll See</h2>
+                <br>
+                <div style="font-size: 0.9em;">
+                    <p style="margin-bottom: 1.5em;"><strong>Travel Planning System</strong> - 5 agents working together</p>
+
+                    <div class="three-cols" style="font-size: 0.85em;">
+                        <div class="col-item" style="grid-column: 1 / -1; margin-bottom: 1em;">
+                            <h3>🎯 Travel Planner (Orchestrator)</h3>
+                            <p>Coordinates all other agents using A2A</p>
+                        </div>
+
+                        <div class="col-item">
+                            <h3>🌤️ Weather</h3>
+                            <p>Forecast info</p>
+                        </div>
+
+                        <div class="col-item">
+                            <h3>🌐 Translator</h3>
+                            <p>Language help</p>
+                        </div>
+
+                        <div class="col-item">
+                            <h3>🔍 Web Search</h3>
+                            <p>Find attractions</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1em;">
+                        <div class="col-item" style="border-color: var(--mcp-green);">
+                            <h3>🧮 Calculator (A2A + MCP)</h3>
+                            <p>Receives A2A requests → Uses MCP math tools → Returns A2A responses</p>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="info-box" style="text-align: center; background: linear-gradient(135deg, rgba(66,133,244,0.1), rgba(52,168,83,0.1)); border: none;">
+                        <p style="font-size: 1.3em;"><strong>All communication: A2A protocol</strong></p>
+                        <p style="margin-top: 0.5em;">Calculator also uses: MCP for precise math</p>
+                    </div>
+
+                    <br>
+                    <p style="text-align: center; font-size: 1.3em; color: var(--accent-amber);">
+                        → Let me show you...
+                    </p>
+                </div>
+            </section>
+
+            <!-- PART 6: CONCLUSION -->
+
+            <!-- SLIDE 26: KEY TAKEAWAYS -->
+            <section>
+                <h2>Key Takeaways</h2>
+                <br>
+                <div style="font-size: 0.95em;">
+                    <ol style="line-height: 2; list-style-position: inside;">
+                        <li style="margin-bottom: 0.8em;">
+                            <strong class="blue">A2A</strong> = Universal language for AI agents
+                            <span class="small" style="display: block; margin-left: 2em; margin-top: 0.3em;">(Created by Google, 2025)</span>
+                        </li>
+
+                        <li style="margin-bottom: 0.8em;">
+                            <strong>Standardization</strong> eliminates fragmentation
+                            <span class="small" style="display: block; margin-left: 2em; margin-top: 0.3em;">(No more custom integrations for each agent)</span>
+                        </li>
+
+                        <li style="margin-bottom: 0.8em;">
+                            <strong>3 Pillars</strong>: Agent Card, Messages/Tasks, Executor
+                            <span class="small" style="display: block; margin-left: 2em; margin-top: 0.3em;">(Discovery, Communication, Execution)</span>
+                        </li>
+
+                        <li style="margin-bottom: 0.8em;">
+                            <strong class="green">MCP</strong> complements A2A
+                            <span class="small" style="display: block; margin-left: 2em; margin-top: 0.3em;">(A2A = agents talk / MCP = agents use tools)</span>
+                        </li>
+
+                        <li style="margin-bottom: 0.8em;">
+                            <strong>Together</strong> = Complete agent platform
+                            <span class="small" style="display: block; margin-left: 2em; margin-top: 0.3em;">(Communication + Tool usage)</span>
+                        </li>
+
+                        <li>
+                            <strong>The Future</strong> = Open ecosystem of interoperable agents
+                            <span class="small" style="display: block; margin-left: 2em; margin-top: 0.3em;">(Marketplaces, federated systems, plug-and-play)</span>
+                        </li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- SLIDE 27: THANK YOU -->
+            <section class="center">
+                <div class="center-content">
+                    <h1 style="font-size: 3em; margin-bottom: 0.5em;">Thank You!</h1>
+                    <br>
+                    <p style="font-size: 1.5em; color: var(--text-muted); margin-bottom: 2em;">
+                        Questions?
+                    </p>
+                    <br>
+                    <div style="font-size: 1.2em; background: var(--bg-darker); padding: 2em; border-radius: 20px; border: 3px solid var(--a2a-blue);">
+                        <p style="margin-bottom: 1em;"><span class="emoji">🚀</span> <strong>Live Demo Time!</strong></p>
+                        <p style="font-size: 0.9em; color: var(--text-dim);">
+                            Watch 5 agents collaborate to plan a trip<br>
+                            using A2A and MCP protocols
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.0/reveal.min.js"></script>
+
+    <!-- Initialize -->
+    <script>
+        // Initialize Reveal with PlantUML plugin
+        Reveal.initialize({
+            hash: true,
+            center: false,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            progress: true,
+            controls: true,
+            controlsTutorial: true,
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            width: 1920,
+            height: 1080,
+            margin: 0.04,
+
+            // Keyboard shortcuts
+            keyboard: {
+                39: 'next',
+                37: 'prev',
+                38: 'prev',
+                40: 'next'
+            },
+
+            // Touch navigation
+            touch: true,
+
+            // View configurations
+            overview: true,
+
+            // PDF export
+            pdfSeparateFragments: false,
+
+            // PlantUML configuration
+            plantuml: {
+                serverPath: 'https://www.plantuml.com/plantuml/svg/'
+            },
+
+            // Dependencies
+            dependencies: [
+                { src: '//cdn.jsdelivr.net/npm/reveal-plantuml' }
+            ]
+        });
+    </script>
+</body>
+</html>
